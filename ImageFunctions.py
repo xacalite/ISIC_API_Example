@@ -24,7 +24,7 @@ def CheckFolder():
         os.mkdir(folder)
     return folder
 
-def Main():
+def main():
     numberOfImagesToGet = '3'
     try:
         imageList = GetImageListFromISICArchive(numberOfImagesToGet)
@@ -45,4 +45,5 @@ def Main():
             image = GetImageByID(val['_id'])
             image.save(path)
 
-Main()
+if __name__ == '__main__':
+    main()
