@@ -26,7 +26,13 @@ def CheckFolder():
 
 def Main():
     numberOfImagesToGet = '3'
-    imageList = GetImageListFromISICArchive(numberOfImagesToGet)
+    try:
+        imageList = GetImageListFromISICArchive(numberOfImagesToGet)
+    except:
+        print ("Unable to connect to ISIC Archive; ending program")
+        return
+
+    # if connection to ISIC archive has been successful, then
     for val in imageList:
         extension = '.jpg'
         path = CheckFolder() + val['name'] + extension
