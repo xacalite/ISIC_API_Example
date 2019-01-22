@@ -15,33 +15,28 @@ def GetImageByID(id):
     r2 = requests.get(urlString)
     imageBytes = r2._content
     image = Image.open(io.BytesIO(imageBytes))
-    return image
-
-def SaveImageToFile(image, fileName):
-    extension = '.jpg'
-    path = CheckFolder() + fileName + extension
-    alreadyExists = os.path.isfile(path)
-    if alreadyExists:
-        print('File already exists at ' + path)
-        return
-    else:
-        print ('Save file to ' + path)
-        image.save(path)
+    return image 
 
 def CheckFolder():
-    folder = os.getcwd() + "\Images\\"
+    folder = os.getcwd() + "/Images/"
     folderExists = os.path.isdir(folder)
-    if (folderExists):
-        print ("Folder " + folder + " already exists")
-    else:
-        print ("Creating folder " + folder)
+    if (not folderExists):
         os.mkdir(folder)
     return folder
 
 def Main():
-    imageList = GetImageListFromISICArchive('1')
+    numberOfImagesToGet = '3'
+    imageList = GetImageListFromISICArchive(numberOfImagesToGet)
     for val in imageList:
-        image = GetImageByID(val['_id'])
-        SaveImageToFile(image, val['name'])
-        #image.show()
+        extension = '.jpg'
+        path = CheckFolder() + val['name'] + extension
+        alreadyExists = os.path.isfile(path)
+        if alreadyExists:
+            print('File already exists at ' + path)
+            continue
+        else:
+            print ('Download and save file to ' + path)
+            image = GetImageByID(val['_id'])
+            image.save(path)
+
 Main()
