@@ -29,9 +29,9 @@ def CheckFolder():
 
 def DoTraining(folderPath):
     encoding_dim = 32 # 32 floats
-    input_img = keras.layers.Input(shape=(784,))
+    input_img = keras.layers.Input(shape=(2351622,))
     encoded = keras.layers.Dense(encoding_dim, activation='relu')(input_img)
-    decoded = keras.layers.Dense(784, activation='sigmoid')(encoded)
+    decoded = keras.layers.Dense(2351622, activation='sigmoid')(encoded)
     autoencoder = keras.models.Model(input_img, decoded)
     encoder = keras.models.Model(input_img, encoded)
     encoded_input = keras.layers.Input(shape=(encoding_dim,))
@@ -60,7 +60,7 @@ def DoTraining(folderPath):
     channels = 3
 
     # Create placeholder for image set
-    x_train = np.ndarray(shape=(len(train_files), image_height, image_width, channels),
+    trainingData = np.ndarray(shape=(len(train_files), image_height, image_width, channels),
                         dtype=np.float32)
 
     # Convert images from files to numpy arrays
@@ -70,17 +70,27 @@ def DoTraining(folderPath):
         img.thumbnail((image_width, image_height))
         # Convert to Numpy Array
         x = img_to_array(img)  
-        x_train[i] = x
+        trainingData[i] = x
         i += 1
         print("%d images to array" % i)
 
     # normalize input data
-    x_train = x_train.astype('float32') / 255.
-    #x_test = x_test.astype('float32') / 255.
-    x_train = x_train.reshape((len(x_train), np.prod(x_train.shape[1:])))
-    #x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
-    print(x_train.shape)
-    #print(x_test.shape)
+    trainingData = trainingData.astype('float32') / 255.
+    trainingData = trainingData.reshape((len(trainingData), np.prod(trainingData.shape[1:])))
+    print(trainingData.shape)
+
+    # load saved weights if they exist; otherwise train and save
+    save_path = "./ISIC_training_weights"
+    if os.path.isfile(save_path + ".index"):
+        autoencoder.load_weights(save_path)
+    else:
+        # train the autoencoder
+        autoencoder.fit(trainingData, trainingData,
+                        epochs=5,
+                        batch_size=10,
+                        shuffle=True,
+                        validation_split=(0.2))
+        autoencoder.save_weights(save_path)
 
 def main():
     numberOfImagesToGet = '10'
