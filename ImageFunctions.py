@@ -80,7 +80,7 @@ def DoTraining(folderPath):
     print(trainingData.shape)
 
     # load saved weights if they exist; otherwise train and save
-    save_path = "./ISIC_training_weights"
+    save_path = "./Save/ISIC_training_weights"
     if os.path.isfile(save_path + ".index"):
         autoencoder.load_weights(save_path)
     else:
