@@ -38,7 +38,6 @@ def TrainOnImagesInFolder(folderPath):
         
     print("Files in train_files: %d" % len(train_files))
     
-
     # Original Dimensions
     image_width = 1022
     image_height = 767

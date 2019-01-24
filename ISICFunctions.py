@@ -25,7 +25,7 @@ def CheckFolder():
     return folder
 
 def main():
-    numberOfImagesToGet = '10'
+    numberOfImagesToGet = '8'
     try:
         imageList = GetImageListFromISICArchive(numberOfImagesToGet)
     except:
