@@ -6,10 +6,17 @@ import numpy as np
 from keras.preprocessing.image import img_to_array, load_img
 
 def TrainOnImagesInFolder(folderPath):
+
+    # Original Dimensions
+    image_width = 1022
+    image_height = 767
+    channels = 3
+    flat_shape = image_width * image_height * channels
+
     encoding_dim = 32 # 32 floats
-    input_img = keras.layers.Input(shape=(2351622,))
+    input_img = keras.layers.Input(shape=(flat_shape,))
     encoded = keras.layers.Dense(encoding_dim, activation='relu')(input_img)
-    decoded = keras.layers.Dense(2351622, activation='sigmoid')(encoded)
+    decoded = keras.layers.Dense(flat_shape, activation='sigmoid')(encoded)
     autoencoder = keras.models.Model(input_img, decoded)
     encoder = keras.models.Model(input_img, encoded)
     encoded_input = keras.layers.Input(shape=(encoding_dim,))
